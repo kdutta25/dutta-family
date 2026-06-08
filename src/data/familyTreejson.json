@@ -1,0 +1,350 @@
+{
+  "id": "nidhiram",
+  "en": "Nidhiram Dutta",
+  "bn": "নিধিরাম দত্ত",
+  "deceased": true,
+  "gender": "m",
+  "children": [
+    {
+      "id": "mathuranath",
+      "en": "Mathuranath Dutta",
+      "bn": "মথুরানাথ দত্ত",
+      "deceased": true,
+      "gender": "m",
+      "children": [
+        {
+          "id": "lakshmikanta",
+          "en": "Lakshmikanta Dutta",
+          "bn": "লক্ষ্মীকান্ত দত্ত",
+          "deceased": true,
+          "gender": "m",
+          "children": [
+            {
+              "id": "gouricharan",
+              "en": "Gouricharan Dutta",
+              "bn": "গৌরীচরণ দত্ত",
+              "deceased": true,
+              "gender": "m",
+              "children": [
+                {
+                  "id": "ramram",
+                  "en": "Ramram Dutta",
+                  "bn": "রামরাম দত্ত",
+                  "deceased": true,
+                  "gender": "m",
+                  "children": [
+                    {
+                      "id": "durgacharan",
+                      "en": "Durgacharan Dutta",
+                      "bn": "দুর্গাচরণ দত্ত",
+                      "deceased": true,
+                      "gender": "m",
+                      "children": [
+                        {
+                          "id": "shivcharan",
+                          "en": "Shivcharan Dutta",
+                          "bn": "শিবচরণ দত্ত",
+                          "deceased": true,
+                          "gender": "m",
+                          "children": [
+                            {
+                              "id": "rajcharan",
+                              "en": "Rajcharan Dutta",
+                              "bn": "রাজচরণ দত্ত",
+                              "deceased": true,
+                              "gender": "m",
+                              "children": [
+                                {
+                                  "id": "kali-dasi",
+                                  "en": "Kali Dasi",
+                                  "bn": "কালী দাসী",
+                                  "deceased": true,
+                                  "gender": "f",
+                                  "children": [
+                                    {
+                                      "id": "yogendranath-left-branch",
+                                      "en": "Yogendranath Dutta",
+                                      "bn": "যোগেন্দ্রনাথ দত্ত",
+                                      "deceased": true,
+                                      "gender": "m"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "id": "madanmohan",
+                      "en": "Madanmohan Dutta",
+                      "bn": "মদনমোহন দত্ত",
+                      "deceased": true,
+                      "gender": "m",
+                      "children": [
+                        {
+                          "id": "shambhucharan",
+                          "en": "Shambhucharan Dutta",
+                          "bn": "শম্ভুচরণ দত্ত",
+                          "deceased": true,
+                          "gender": "m",
+                          "children": [
+                            {
+                              "id": "hiralal",
+                              "en": "Hiralal Dutta",
+                              "bn": "হীরালাল দত্ত",
+                              "deceased": true,
+                              "gender": "m",
+                              "title": {
+                                "en": "Rai Bahadur",
+                                "bn": "রায় বাহাদুর"
+                              },
+                              "children": [
+                                {
+                                  "id": "debendranath",
+                                  "en": "Debendranath Dutta",
+                                  "bn": "দেবেন্দ্রনাথ দত্ত",
+                                  "deceased": true,
+                                  "gender": "m",
+                                  "children": [
+                                    {
+                                      "id": "yogendranath",
+                                      "en": "Yogendranath Dutta",
+                                      "bn": "যোগেন্দ্রনাথ দত্ত",
+                                      "deceased": true,
+                                      "gender": "m"
+                                    },
+                                    {
+                                      "id": "brajendranath",
+                                      "en": "Sri Brajendranath Dutta",
+                                      "bn": "শ্রী ব্রজেন্দ্রনাথ দত্ত",
+                                      "deceased": true,
+                                      "gender": "m",
+                                      "children": [
+                                        {
+                                          "id": "ramendranath",
+                                          "en": "Sriman Ramendra Nath Dutta",
+                                          "bn": "শ্রীমান রমেন্দ্র নাথ দত্ত",
+                                          "deceased": true,
+                                          "gender": "m"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "id": "yogamaya",
+                                      "en": "Yogamaya",
+                                      "bn": "যোগমায়া",
+                                      "deceased": true,
+                                      "gender": "f",
+                                      "children": [
+                                        {
+                                          "id": "kumari-mira",
+                                          "en": "Kumari Mira",
+                                          "bn": "কুমারী মীরা",
+                                          "deceased": true,
+                                          "gender": "f"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "saudamini",
+                                  "en": "Saudamini",
+                                  "bn": "সৌদামিনী",
+                                  "deceased": true,
+                                  "gender": "f"
+                                },
+                                {
+                                  "id": "girindranath",
+                                  "en": "Girindranath Dutta",
+                                  "bn": "গিরীন্দ্রনাথ দত্ত",
+                                  "deceased": true,
+                                  "gender": "m",
+                                  "children": [
+                                    {
+                                      "id": "sukhalata",
+                                      "en": "Srimati Sukhalata",
+                                      "bn": "শ্রীমতী সুখলতা",
+                                      "deceased": true,
+                                      "gender": "f"
+                                    },
+                                    {
+                                      "id": "makar-paban",
+                                      "en": "Srimati Makar Paban",
+                                      "bn": "শ্রীমতী মকর পাবন",
+                                      "deceased": true,
+                                      "gender": "f"
+                                    },
+                                    {
+                                      "id": "patit-paban",
+                                      "en": "Patit Paban Dutta",
+                                      "bn": "পতিত পাবন দত্ত",
+                                      "deceased": true,
+                                      "gender": "m",
+                                      "children": [
+                                        {
+                                          "id": "kumari-usha",
+                                          "en": "Kumari Usha",
+                                          "bn": "কুমারী ঊষা",
+                                          "deceased": true,
+                                          "gender": "f"
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "id": "parbati-charan",
+                                      "en": "Sri Parbati Charan Dutta",
+                                      "bn": "শ্রী পার্বতী চরণ দত্ত",
+                                      "deceased": true,
+                                      "gender": "m"
+                                    },
+                                    {
+                                      "id": "leela-mouli",
+                                      "en": "Srimati Leela Mouli Dutta",
+                                      "bn": "শ্রীমতী লীলা মৌলী দত্ত",
+                                      "deceased": true,
+                                      "gender": "f"
+                                    },
+                                    {
+                                      "id": "shankar-mouli",
+                                      "en": "Sriman Shankar Mouli Dutta",
+                                      "bn": "শ্রীমান শঙ্কর মৌলী দত্ত",
+                                      "deceased": true,
+                                      "gender": "m"
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "id": "bhubaneswar",
+                              "en": "Bhubaneswar Dutta",
+                              "bn": "ভুবনেশ্বর দত্ত",
+                              "deceased": true,
+                              "gender": "m",
+                              "children": [
+                                {
+                                  "id": "daughter-childhood",
+                                  "en": "Daughter",
+                                  "bn": "কন্যা",
+                                  "deceased": true,
+                                  "gender": "f",
+                                  "note": {
+                                    "en": "Died in childhood",
+                                    "bn": "শৈশবে মৃত্যু"
+                                  }
+                                }
+                              ]
+                            },
+                            {
+                              "id": "kedareshwar",
+                              "en": "Kedareswar Dutta",
+                              "bn": "কেদারেশ্বর দত্ত",
+                              "deceased": true,
+                              "gender": "m",
+                              "children": [
+                                {
+                                  "id": "narendranath",
+                                  "en": "Narendranath Dutta",
+                                  "bn": "নরেন্দ্রনাথ দত্ত",
+                                  "deceased": true,
+                                  "gender": "m",
+                                  "children": [
+                                    {
+                                      "id": "somendranath",
+                                      "en": "Sri Somendra Nath Dutta",
+                                      "bn": "শ্রী সোমেন্দ্র নাথ দত্ত",
+                                      "deceased": true,
+                                      "gender": "m",
+                                      "children": [
+                                        {
+                                          "id": "two-daughters",
+                                          "en": "Two daughters",
+                                          "bn": "দুইটী কন্যা",
+                                          "gender": "f",
+                                          "note": {
+                                            "en": "As shown in the chart",
+                                            "bn": "চার্ট অনুযায়ী"
+                                          }
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "satyendranath",
+                                  "en": "Satyendranath Dutta",
+                                  "bn": "সত্যেন্দ্রনাথ দত্ত",
+                                  "deceased": true,
+                                  "gender": "m",
+                                  "children": [
+                                    {
+                                      "id": "jhula",
+                                      "en": "Jhula",
+                                      "bn": "ঝুলা",
+                                      "deceased": true,
+                                      "gender": "f"
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "khetu",
+                                  "en": "Khetu",
+                                  "bn": "খেতু",
+                                  "deceased": true,
+                                  "gender": "f",
+                                  "note": {
+                                    "en": "Only daughter",
+                                    "bn": "একমাত্র কন্যা"
+                                  },
+                                  "children": [
+                                    {
+                                      "id": "nalini-bijoy",
+                                      "en": "Nalini Bijay Dutta",
+                                      "bn": "নলিনী বিজয় দত্ত",
+                                      "deceased": true,
+                                      "gender": "m"
+                                    },
+                                    {
+                                      "id": "nilendra-nath",
+                                      "en": "Nilendra Nath Dutta",
+                                      "bn": "নীলেন্দ্র নাথ দত্ত",
+                                      "deceased": true,
+                                      "gender": "m"
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "id": "siddheshwar",
+                          "en": "Siddheswar Dutta",
+                          "bn": "সিদ্ধেশ্বর দত্ত",
+                          "deceased": true,
+                          "gender": "m",
+                          "children": [
+                            {
+                              "id": "akshyakumar",
+                              "en": "Akshyakumar Dutta",
+                              "bn": "অক্ষয়কুমার দত্ত",
+                              "deceased": true,
+                              "gender": "m"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
