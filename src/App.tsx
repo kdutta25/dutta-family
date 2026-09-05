@@ -1,47 +1,65 @@
-import { familyTreeRoot } from "./data/familyTree";
-import { FamilyHistoryCard } from "./components/FamilyHistoryCard";
-import { FamilyTreeView } from "./components/FamilyTreeView";
-import { useLanguage } from "./i18n/LanguageContext";
+import { useMemo, useState } from "react";
 
-function LanguageToggle() {
-  const { language, setLanguage, ui } = useLanguage();
-  return (
-    <div className="lang-toggle" role="group" aria-label={ui.languageLabel}>
-      <button
-        type="button"
-        className={language === "en" ? "is-active" : ""}
-        onClick={() => setLanguage("en")}
-      >
-        {ui.english}
-      </button>
-      <button
-        type="button"
-        className={language === "bn" ? "is-active" : ""}
-        onClick={() => setLanguage("bn")}
-      >
-        {ui.bengali}
-      </button>
-    </div>
-  );
+import { familyTreeRoot } from "./data/familyTree";
+import { Header } from "./components/Header";
+import { HistoryDrawer } from "./components/HistoryDrawer";
+import { FamilyTreeView } from "./components/FamilyTreeView";
+import { PersonPanel } from "./components/PersonPanel";
+import { useLanguage } from "./i18n/LanguageContext";
+import { pathTo } from "./utils/tree";
+
+function SelectHint() {
+  const { ui } = useLanguage();
+  return <p className="select-hint">{ui.selectHint}</p>;
 }
 
 export default function App() {
-  const { ui } = useLanguage();
+  const [selectedId, setSelectedId] = useState<string | null>(
+    familyTreeRoot.id,
+  );
+  const [historyOpen, setHistoryOpen] = useState(false);
+
+  const lineage = useMemo(
+    () => (selectedId ? pathTo(familyTreeRoot, selectedId) : null),
+    [selectedId],
+  );
+  const person = lineage?.at(-1) ?? null;
+  const parent = lineage && lineage.length > 1 ? lineage[lineage.length - 2] : null;
+  const pathIds = useMemo(
+    () => new Set((lineage ?? []).map((node) => node.id)),
+    [lineage],
+  );
+
   return (
     <div className="app">
-      <header className="app-header">
-        <div className="brand">
-          <div>
-            <h1 className="brand__title">{ui.siteTitle}</h1>
-            <p className="brand__subtitle">{ui.subtitle}</p>
-          </div>
-        </div>
-        <LanguageToggle />
-      </header>
-      <main className="tree-shell">
-        <FamilyTreeView root={familyTreeRoot} />
-        <FamilyHistoryCard />
+      <Header
+        root={familyTreeRoot}
+        onOpenHistory={() => setHistoryOpen(true)}
+      />
+      <main className="stage">
+        <FamilyTreeView
+          root={familyTreeRoot}
+          selectedId={selectedId}
+          pathIds={pathIds}
+          onSelect={setSelectedId}
+        />
+        {person ? (
+          <PersonPanel
+            person={person}
+            parent={parent ?? null}
+            generation={lineage?.length ?? 1}
+            lineage={lineage ?? [person]}
+            onSelect={setSelectedId}
+            onClose={() => setSelectedId(null)}
+          />
+        ) : (
+          <SelectHint />
+        )}
       </main>
+      <HistoryDrawer
+        open={historyOpen}
+        onClose={() => setHistoryOpen(false)}
+      />
     </div>
   );
 }

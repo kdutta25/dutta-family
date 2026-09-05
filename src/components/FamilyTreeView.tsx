@@ -9,10 +9,12 @@ import {
 import Tree, {
   type CustomNodeElementProps,
   type RawNodeDatum,
+  type TreeLinkDatum,
 } from "react-d3-tree";
 
-import type { FamilyNode } from "../data/familyTree";
+import type { FamilyNode, Language } from "../data/familyTree";
 import { useLanguage } from "../i18n/LanguageContext";
+import { filterFamilyNode, matchingIds } from "../utils/tree";
 
 function toRd3(node: FamilyNode): RawNodeDatum {
   return {
@@ -32,33 +34,25 @@ function toRd3(node: FamilyNode): RawNodeDatum {
   };
 }
 
-function filterFamilyNode(node: FamilyNode, q: string): FamilyNode | null {
-  const needle = q.trim().toLowerCase();
-  if (!needle) return node;
-
-  const selfMatch =
-    node.en.toLowerCase().includes(needle) ||
-    (node.bn?.toLowerCase().includes(needle) ?? false);
-
-  const kids = (node.children ?? [])
-    .map((c) => filterFamilyNode(c, q))
-    .filter((x): x is FamilyNode => x !== null);
-
-  if (selfMatch || kids.length) {
-    return { ...node, children: kids.length ? kids : undefined };
-  }
-  return null;
-}
-
 function Rd3CustomNode({
   rd3tProps,
   language,
+  selectedId,
+  matchIds,
+  pathIds,
+  onSelect,
 }: {
   rd3tProps: CustomNodeElementProps;
-  language: "en" | "bn";
+  language: Language;
+  selectedId: string | null;
+  matchIds: Set<string>;
+  pathIds: Set<string>;
+  onSelect: (id: string) => void;
 }): JSX.Element {
+  const { ui } = useLanguage();
   const { nodeDatum, toggleNode } = rd3tProps;
   const a = nodeDatum.attributes ?? {};
+  const id = String(a.id ?? "");
   const en = String(a.en ?? nodeDatum.name);
   const bn = String(a.bn ?? "");
   const gender = a.gender === "f" ? "f" : "m";
@@ -67,45 +61,61 @@ function Rd3CustomNode({
   const titleBn = String(a.titleBn ?? "");
   const noteEn = String(a.noteEn ?? "");
   const noteBn = String(a.noteBn ?? "");
-  const title =
-    language === "bn" && titleBn ? titleBn : titleEn || undefined;
-  const note =
-    language === "bn" && noteBn ? noteBn : noteEn || undefined;
+  const title = language === "bn" && titleBn ? titleBn : titleEn || undefined;
+  const note = language === "bn" && noteBn ? noteBn : noteEn || undefined;
+  const primary = language === "bn" && bn ? bn : en;
+  const secondary = language === "bn" ? en : bn;
   const hasChildren = Boolean(
     nodeDatum.children && nodeDatum.children.length > 0,
   );
+  const collapsed = Boolean(nodeDatum.__rd3t?.collapsed);
+  const selected = id === selectedId;
+  const matched = matchIds.has(id);
+  const onPath = pathIds.has(id);
 
   return (
     <foreignObject
-      width={190}
-      height={hasChildren ? 72 : 66}
-      x={-95}
-      y={-33}
+      width={216}
+      height={note || title ? 92 : 78}
+      x={-108}
+      y={-39}
       className="rd3t-foreign"
     >
       <div
-        className={`rd3t-person rd3t-person--${gender}`}
-        role="group"
-        onClick={(e) => {
-          e.stopPropagation();
-          toggleNode();
+        className={[
+          "rd3t-person",
+          `rd3t-person--${gender}`,
+          selected ? "is-selected" : "",
+          matched ? "is-match" : "",
+          onPath && !selected ? "is-lineage" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+        role="button"
+        aria-pressed={selected}
+        onClick={(event) => {
+          event.stopPropagation();
+          onSelect(id);
         }}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            toggleNode();
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            onSelect(id);
           }
         }}
         tabIndex={0}
       >
-        <span className="rd3t-person__gender" aria-hidden="true">
-          {gender === "m" ? "♂" : "♀"}
-        </span>
+        <span className="rd3t-person__mark" aria-hidden="true" />
         <span className="rd3t-person__body">
-          <strong className="rd3t-person__en">{en}</strong>
-          {bn ? (
-            <span className="rd3t-person__bn" lang="bn">
-              {bn}
+          <strong className="rd3t-person__primary" lang={language}>
+            {primary}
+          </strong>
+          {secondary ? (
+            <span
+              className="rd3t-person__secondary"
+              lang={language === "bn" ? "en" : "bn"}
+            >
+              {secondary}
             </span>
           ) : null}
           {title ? (
@@ -118,17 +128,41 @@ function Rd3CustomNode({
             †
           </span>
         ) : null}
+        {hasChildren ? (
+          <button
+            type="button"
+            className="rd3t-person__branch"
+            aria-label={collapsed ? ui.expandNode : ui.collapseNode}
+            onClick={(event) => {
+              event.stopPropagation();
+              toggleNode();
+            }}
+          >
+            {collapsed ? "+" : "–"}
+          </button>
+        ) : null}
       </div>
     </foreignObject>
   );
 }
 
-export function FamilyTreeView({ root }: { root: FamilyNode }) {
+export function FamilyTreeView({
+  root,
+  selectedId,
+  pathIds,
+  onSelect,
+}: {
+  root: FamilyNode;
+  selectedId: string | null;
+  pathIds: Set<string>;
+  onSelect: (id: string) => void;
+}) {
   const { ui, language } = useLanguage();
   const wrapRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 900, height: 640 });
   const [search, setSearch] = useState("");
   const [depthKey, setDepthKey] = useState<"open" | "closed">("open");
+  const [viewKey, setViewKey] = useState(0);
 
   const filteredRoot = useMemo(
     () => filterFamilyNode(root, search),
@@ -140,107 +174,129 @@ export function FamilyTreeView({ root }: { root: FamilyNode }) {
     return toRd3(filteredRoot);
   }, [filteredRoot]);
 
+  const matchIds = useMemo(() => matchingIds(root, search), [root, search]);
+
   useLayoutEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
     const measure = () => {
-      const r = el.getBoundingClientRect();
+      const rect = el.getBoundingClientRect();
       setDimensions({
-        width: Math.max(360, Math.floor(r.width)),
-        height: Math.max(480, Math.floor(r.height)),
+        width: Math.max(360, Math.floor(rect.width)),
+        height: Math.max(480, Math.floor(rect.height)),
       });
     };
     measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-    return () => ro.disconnect();
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   const renderNode = useCallback(
     (rd3tProps: CustomNodeElementProps) => (
-      <Rd3CustomNode rd3tProps={rd3tProps} language={language} />
+      <Rd3CustomNode
+        rd3tProps={rd3tProps}
+        language={language}
+        selectedId={selectedId}
+        matchIds={matchIds}
+        pathIds={pathIds}
+        onSelect={onSelect}
+      />
     ),
-    [language],
+    [language, selectedId, matchIds, pathIds, onSelect],
+  );
+
+  const pathClassFunc = useCallback(
+    (link: TreeLinkDatum) => {
+      const targetId = String(link.target.data.attributes?.id ?? "");
+      return pathIds.has(targetId) ? "rd3t-link--lineage" : "";
+    },
+    [pathIds],
   );
 
   const initialDepth = depthKey === "closed" ? 0 : undefined;
 
   return (
     <section
-      className="tree-panel rd3t-tree-panel"
+      className="tree-panel"
       aria-labelledby="tree-heading"
     >
       {!treeData ? (
-        <p className="rd3t-tree-empty">{ui.noMatches}</p>
+        <p className="tree-empty">{ui.noMatches}</p>
       ) : (
-        <div ref={wrapRef} className="rd3t-tree-wrap">
+        <div ref={wrapRef} className="tree-canvas">
+          <div className="tree-frame" aria-hidden="true" />
           <h2 id="tree-heading" className="sr-only">
             {ui.treeHeading}
           </h2>
-          <div className="rd3t-toolbar">
+          <div className="tree-toolbar">
             <button
               type="button"
-              className="rd3t-toolbar__btn"
+              className="tree-toolbar__btn"
               onClick={() => setDepthKey("open")}
             >
-              <span aria-hidden="true">↕</span>
               {ui.expandAll}
             </button>
             <button
               type="button"
-              className="rd3t-toolbar__btn"
+              className="tree-toolbar__btn"
               onClick={() => setDepthKey("closed")}
             >
-              <span aria-hidden="true">◇</span>
               {ui.collapseAll}
             </button>
-            <label className="rd3t-toolbar__search">
+            <button
+              type="button"
+              className="tree-toolbar__btn"
+              onClick={() => setViewKey((value) => value + 1)}
+            >
+              {ui.resetView}
+            </button>
+            <label className="tree-toolbar__search">
+              <span className="sr-only">{ui.searchLabel}</span>
               <input
                 type="search"
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
+                onChange={(event) => setSearch(event.target.value)}
                 placeholder={ui.searchPlaceholder}
                 aria-label={ui.searchLabel}
               />
-              <span className="rd3t-toolbar__search-icon" aria-hidden="true">
-                ⌕
-              </span>
             </label>
           </div>
-          <aside className="rd3t-legend" aria-label="Legend">
+          <aside className="tree-legend" aria-label="Legend">
             <div>
-              <span className="rd3t-legend__dot rd3t-legend__dot--m" />
+              <span className="tree-legend__bar tree-legend__bar--m" />
               {ui.male}
             </div>
             <div>
-              <span className="rd3t-legend__dot rd3t-legend__dot--f" />
+              <span className="tree-legend__bar tree-legend__bar--f" />
               {ui.female}
             </div>
             <div>
-              <span className="rd3t-legend__dagger">†</span>
+              <span className="tree-legend__dagger">†</span>
               {ui.deceased}
             </div>
           </aside>
           <Tree
-            key={`${language}-${depthKey}-${search}-${dimensions.width}x${dimensions.height}`}
+            key={`${language}-${depthKey}-${search}-${viewKey}-${dimensions.width}x${dimensions.height}`}
             data={treeData}
             orientation="vertical"
-            translate={{ x: dimensions.width / 2, y: 62 }}
+            translate={{ x: dimensions.width / 2, y: 88 }}
             dimensions={dimensions}
-            depthFactor={112}
-            nodeSize={{ x: 210, y: 124 }}
-            separation={{ siblings: 1, nonSiblings: 1.2 }}
+            depthFactor={128}
+            nodeSize={{ x: 236, y: 136 }}
+            separation={{ siblings: 1.05, nonSiblings: 1.28 }}
             pathFunc="elbow"
+            pathClassFunc={pathClassFunc}
             collapsible
             zoomable
             draggable
-            scaleExtent={{ min: 0.08, max: 1.75 }}
-            zoom={0.8}
+            scaleExtent={{ min: 0.08, max: 1.8 }}
+            zoom={0.72}
             renderCustomNodeElement={renderNode}
             hasInteractiveNodes
             initialDepth={initialDepth}
           />
-          <p className="rd3t-tree-hint">{ui.treeHint}</p>
+          <p className="tree-hint">{ui.treeHint}</p>
         </div>
       )}
     </section>
