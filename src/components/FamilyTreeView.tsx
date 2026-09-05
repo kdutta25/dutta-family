@@ -36,6 +36,12 @@ function toRd3(node: FamilyNode): RawNodeDatum {
   };
 }
 
+function ellipsize(value: string, max: number) {
+  const chars = Array.from(value);
+  if (chars.length <= max) return value;
+  return `${chars.slice(0, Math.max(1, max - 1)).join("")}…`;
+}
+
 function Rd3CustomNode({
   rd3tProps,
   language,
@@ -78,34 +84,105 @@ function Rd3CustomNode({
   const matched = matchIds.has(id);
   const onPath = pathIds.has(id);
 
-  const cardHeight = compact
-    ? note || title || childCount > 0
-      ? 84
-      : 68
-    : note || title || childCount > 0
-      ? 96
-      : 78;
-  const cardWidth = compact ? 176 : 232;
+  const cardClass = [
+    "rd3t-person",
+    `rd3t-person--${gender}`,
+    compact ? "is-compact" : "",
+    selected ? "is-selected" : "",
+    matched ? "is-match" : "",
+    onPath && !selected ? "is-lineage" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  if (compact) {
+    const width = 168;
+    const height = secondary ? 62 : 52;
+    const x = -width / 2;
+    const y = -height / 2;
+    return (
+      <g
+        className={`rd3t-svg-card ${cardClass}`}
+        role="button"
+        aria-pressed={selected}
+        tabIndex={0}
+        style={{ pointerEvents: "all" }}
+        onClick={(event) => {
+          event.stopPropagation();
+          onSelect(id);
+        }}
+      >
+        <rect
+          className="rd3t-svg-card__body"
+          x={x}
+          y={y}
+          width={width}
+          height={height}
+          rx={10}
+        />
+        <rect
+          className="rd3t-svg-card__mark"
+          x={x}
+          y={y}
+          width={7}
+          height={height}
+          rx={3}
+        />
+        <text
+          className="rd3t-svg-card__primary"
+          lang={language}
+          x={x + 16}
+          y={secondary ? y + 24 : y + 32}
+        >
+          {ellipsize(primary, 16)}
+        </text>
+        {secondary ? (
+          <text
+            className="rd3t-svg-card__secondary"
+            lang={language === "bn" ? "en" : "bn"}
+            x={x + 16}
+            y={y + 42}
+          >
+            {ellipsize(secondary, 20)}
+          </text>
+        ) : null}
+        {deceased ? (
+          <text className="rd3t-svg-card__dagger" x={x + width - 16} y={y + 22}>
+            †
+          </text>
+        ) : null}
+        {hasChildren ? (
+          <g
+            className="rd3t-svg-card__branch"
+            style={{ pointerEvents: "all" }}
+            onClick={(event) => {
+              event.stopPropagation();
+              toggleNode();
+            }}
+          >
+            <circle cx={x + width - 2} cy={y + height - 2} r={11} />
+            <text x={x + width - 2} y={y + height + 2} textAnchor="middle">
+              {collapsed ? "+" : "–"}
+            </text>
+          </g>
+        ) : null}
+      </g>
+    );
+  }
+
+  const cardHeight = note || title || childCount > 0 ? 96 : 78;
+  const cardWidth = 232;
 
   return (
     <foreignObject
       width={cardWidth}
       height={cardHeight}
-      x={compact ? -82 : -108}
-      y={compact ? -34 : -39}
+      x={-108}
+      y={-39}
       className="rd3t-foreign"
     >
       <div
-        className={[
-          "rd3t-person",
-          `rd3t-person--${gender}`,
-          compact ? "is-compact" : "",
-          selected ? "is-selected" : "",
-          matched ? "is-match" : "",
-          onPath && !selected ? "is-lineage" : "",
-        ]
-          .filter(Boolean)
-          .join(" ")}
+        className={cardClass}
         role="button"
         aria-pressed={selected}
         onClick={(event) => {
@@ -179,9 +256,15 @@ export function FamilyTreeView({
 }) {
   const { ui, language } = useLanguage();
   const wrapRef = useRef<HTMLDivElement>(null);
-  const [dimensions, setDimensions] = useState({ width: 900, height: 640 });
+  const [dimensions, setDimensions] = useState(() => {
+    if (typeof window === "undefined") return { width: 900, height: 640 };
+    return {
+      width: Math.max(280, window.innerWidth),
+      height: Math.max(240, Math.floor(window.innerHeight * 0.5)),
+    };
+  });
   const [search, setSearch] = useState("");
-  const [depthKey, setDepthKey] = useState<"open" | "closed">("open");
+  const [depthKey, setDepthKey] = useState<"open" | "closed" | "full">("open");
   const [viewKey, setViewKey] = useState(0);
 
   const filteredRoot = useMemo(
@@ -213,6 +296,8 @@ export function FamilyTreeView({
   }, []);
 
   const compact = dimensions.width < 760;
+  const initialDepth =
+    depthKey === "closed" ? 0 : depthKey === "full" || !compact ? undefined : 2;
 
   const renderNode = useCallback(
     (rd3tProps: CustomNodeElementProps) => (
@@ -237,26 +322,12 @@ export function FamilyTreeView({
     [pathIds],
   );
 
-  const initialDepth = depthKey === "closed" ? 0 : undefined;
-
-  return (
-    <section
-      className="tree-panel"
-      aria-labelledby="tree-heading"
-    >
-      {!treeData ? (
-        <p className="tree-empty">{ui.noMatches}</p>
-      ) : (
-        <div ref={wrapRef} className={compact ? "tree-canvas is-compact" : "tree-canvas"}>
-          <div className="tree-frame" aria-hidden="true" />
-          <h2 id="tree-heading" className="sr-only">
-            {ui.treeHeading}
-          </h2>
+  const toolbar = (
           <div className="tree-toolbar">
             <button
               type="button"
               className="tree-toolbar__btn"
-              onClick={() => setDepthKey("open")}
+              onClick={() => setDepthKey(compact ? "full" : "open")}
             >
               {ui.expandAll}
             </button>
@@ -270,7 +341,10 @@ export function FamilyTreeView({
             <button
               type="button"
               className="tree-toolbar__btn"
-              onClick={() => setViewKey((value) => value + 1)}
+              onClick={() => {
+                setDepthKey("open");
+                setViewKey((value) => value + 1);
+              }}
             >
               {ui.resetView}
             </button>
@@ -285,6 +359,24 @@ export function FamilyTreeView({
               />
             </label>
           </div>
+  );
+
+  return (
+    <section
+      className={compact ? "tree-panel is-compact" : "tree-panel"}
+      aria-labelledby="tree-heading"
+    >
+      {compact ? toolbar : null}
+      {!treeData ? (
+        <p className="tree-empty">{ui.noMatches}</p>
+      ) : (
+        <div ref={wrapRef} className={compact ? "tree-canvas is-compact" : "tree-canvas"}>
+          <div className="tree-frame" aria-hidden="true" />
+          <h2 id="tree-heading" className="sr-only">
+            {ui.treeHeading}
+          </h2>
+          {compact ? null : toolbar}
+          {compact ? null : (
           <aside className="tree-legend" aria-label="Legend">
             <div>
               <span className="tree-legend__bar tree-legend__bar--m" />
@@ -299,30 +391,31 @@ export function FamilyTreeView({
               {ui.deceased}
             </div>
           </aside>
+          )}
           <Tree
             key={`${language}-${depthKey}-${search}-${viewKey}-${familyTreeRevision}-${dimensions.width}x${dimensions.height}`}
             data={treeData}
             orientation="vertical"
-            translate={{ x: dimensions.width / 2, y: compact ? 126 : 88 }}
+            translate={{ x: dimensions.width / 2, y: compact ? 56 : 88 }}
             dimensions={dimensions}
-            depthFactor={compact ? 108 : 128}
-            nodeSize={{ x: compact ? 196 : 280, y: compact ? 118 : 150 }}
+            depthFactor={compact ? 96 : 128}
+            nodeSize={{ x: compact ? 188 : 280, y: compact ? 100 : 150 }}
             separation={{
-              siblings: compact ? 1.12 : 1.35,
-              nonSiblings: compact ? 1.24 : 1.5,
+              siblings: compact ? 1.08 : 1.35,
+              nonSiblings: compact ? 1.18 : 1.5,
             }}
             pathFunc="elbow"
             pathClassFunc={pathClassFunc}
             collapsible
             zoomable
             draggable
-            scaleExtent={{ min: compact ? 0.05 : 0.08, max: 1.8 }}
-            zoom={compact ? 0.46 : 0.72}
+            scaleExtent={{ min: compact ? 0.12 : 0.08, max: 1.8 }}
+            zoom={compact ? 0.82 : 0.72}
             renderCustomNodeElement={renderNode}
             hasInteractiveNodes
             initialDepth={initialDepth}
           />
-          <p className="tree-hint">{compact ? ui.treeHintMobile : ui.treeHint}</p>
+          {compact ? null : <p className="tree-hint">{ui.treeHint}</p>}
         </div>
       )}
     </section>

@@ -543,6 +543,89 @@ button {
   stroke-width: 2.15 !important;
 }
 
+.rd3t-svg-card {
+  cursor: pointer;
+}
+
+.rd3t-svg-card__body {
+  fill: #fffdf7;
+  stroke: #d7c19a;
+  stroke-width: 1.25;
+}
+
+.rd3t-svg-card.is-selected .rd3t-svg-card__body {
+  fill: #fff8e6;
+  stroke: var(--gold);
+  stroke-width: 2.2;
+}
+
+.rd3t-svg-card.is-lineage .rd3t-svg-card__body {
+  stroke: var(--gold-line);
+}
+
+.rd3t-svg-card.is-match .rd3t-svg-card__body {
+  stroke: var(--gold-bright);
+}
+
+.rd3t-svg-card__mark {
+  fill: var(--male);
+}
+
+.rd3t-svg-card.rd3t-person--f .rd3t-svg-card__mark {
+  fill: var(--female);
+}
+
+.rd3t-svg-card__primary {
+  fill: var(--ink);
+  font-family: var(--display);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.rd3t-svg-card__primary[lang="bn"] {
+  font-family: var(--bengali);
+}
+
+.rd3t-svg-card__secondary {
+  fill: var(--muted);
+  font-family: var(--ui);
+  font-size: 10px;
+}
+
+.rd3t-svg-card__secondary[lang="bn"] {
+  font-family: var(--bengali);
+}
+
+.rd3t-svg-card__dagger {
+  fill: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.rd3t-svg-card__branch circle {
+  fill: #fffaf1;
+  stroke: var(--gold-line);
+  stroke-width: 1.1;
+}
+
+.rd3t-svg-card__branch text {
+  fill: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.tree-panel.is-compact .tree-toolbar {
+  position: static;
+  top: auto;
+  left: auto;
+  right: auto;
+  max-width: none;
+  padding: 8px 10px 8px;
+  background: rgb(247 237 214 / 0.94);
+  border-bottom: 1px solid rgb(138 106 44 / 0.18);
+}
+
 .rd3t-node > circle,
 .rd3t-leaf-node > circle {
   display: none;
@@ -871,15 +954,24 @@ button {
 }
 
 @media (max-width: 760px) {
+  html,
+  body,
+  #root,
+  .app {
+    height: 100svh;
+    min-height: 100svh;
+    overflow: hidden;
+  }
+
   .app-header {
-    padding: 10px 12px 12px;
-    padding-top: calc(10px + env(safe-area-inset-top));
+    padding: 8px 12px 10px;
+    padding-top: calc(8px + env(safe-area-inset-top));
   }
 
   .seal {
-    width: 42px;
-    height: 42px;
-    font-size: 20px;
+    width: 38px;
+    height: 38px;
+    font-size: 18px;
   }
 
   .brand {
@@ -892,102 +984,42 @@ button {
   }
 
   .brand__title {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   .history-launch,
-  .tree-toolbar__btn,
   .lang-toggle button {
-    min-height: 44px;
+    min-height: 40px;
   }
 
-  .history-launch,
-  .tree-toolbar__btn {
-    padding: 0 12px;
+  .tree-panel.is-compact .tree-toolbar__btn {
+    min-height: 36px;
+    height: 36px;
+    padding: 0 10px;
+    font-size: 12px;
   }
 
   .header-actions {
     gap: 8px;
   }
 
-  .tree-canvas.is-compact {
-    padding-bottom: 0;
-  }
-
-  .has-sheet .tree-canvas.is-compact {
-    padding-bottom: calc(108px + env(safe-area-inset-bottom));
-  }
-
-  .tree-toolbar {
-    top: 12px;
-    left: 12px;
-    right: 12px;
-    max-width: none;
-  }
-
-  .tree-toolbar__search {
+  .tree-panel.is-compact .tree-toolbar__search {
     order: -1;
     flex: 1 1 100%;
-    min-height: 44px;
-    height: 44px;
+    min-height: 40px;
+    height: 40px;
   }
 
   .tree-toolbar__search input {
     font-size: 16px;
   }
 
-  .tree-legend {
-    left: 12px;
-    right: 12px;
-    bottom: 16px;
-    top: auto;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px 14px;
-    padding: 8px 12px;
-    border-radius: 12px;
-  }
-
-  .has-sheet .tree-legend {
-    bottom: calc(118px + env(safe-area-inset-bottom));
-  }
-
-  .tree-hint {
-    left: 12px;
-    right: 12px;
-    width: auto;
-    bottom: 12px;
-    transform: none;
-    white-space: normal;
-    text-align: center;
-  }
-
-  .has-sheet .tree-hint {
-    bottom: calc(88px + env(safe-area-inset-bottom));
-  }
-
   .select-hint {
     display: none;
   }
 
-  .rd3t-person.is-compact {
-    gap: 6px;
-    padding: 6px 8px 6px 0;
-    border-radius: 10px;
-  }
-
-  .rd3t-person.is-compact .rd3t-person__primary {
-    font-size: 12px;
-  }
-
-  .rd3t-person.is-compact .rd3t-person__secondary,
-  .rd3t-person.is-compact .rd3t-person__title,
-  .rd3t-person.is-compact .rd3t-person__kids {
-    font-size: 9px;
-  }
-
-  .rd3t-person.is-compact .rd3t-person__note {
-    display: none;
+  .has-sheet .tree-canvas.is-compact {
+    padding-bottom: calc(84px + env(safe-area-inset-bottom));
   }
 
   .person-panel.is-sheet {
@@ -997,17 +1029,17 @@ button {
     bottom: 0;
     width: 100%;
     max-height: min(62dvh, 520px);
-    border-radius: 22px 22px 0 0;
-    padding: 8px 18px calc(20px + env(safe-area-inset-bottom));
+    border-radius: 18px 18px 0 0;
+    padding: 4px 16px calc(16px + env(safe-area-inset-bottom));
   }
 
   .person-panel__handle {
     display: grid;
     place-items: center;
     width: 100%;
-    min-height: 28px;
+    min-height: 22px;
     margin: 0;
-    padding: 8px 0 4px;
+    padding: 6px 0 0;
     border: 0;
     background: transparent;
     cursor: pointer;
@@ -1021,7 +1053,7 @@ button {
   }
 
   .person-panel.is-sheet h2 {
-    font-size: 24px;
+    font-size: 22px;
     padding-right: 76px;
     cursor: pointer;
   }
@@ -1029,6 +1061,8 @@ button {
   .person-panel.is-collapsed {
     max-height: none;
     overflow: hidden;
+    padding-top: 2px;
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
   }
 
   .person-panel.is-collapsed .person-panel__block,
@@ -1038,8 +1072,14 @@ button {
     display: none;
   }
 
+  .person-panel.is-collapsed .person-panel__gen {
+    margin: 0;
+    font-size: 10px;
+  }
+
   .person-panel.is-collapsed .person-panel__other {
-    margin-bottom: 8px;
+    margin: 0 0 2px;
+    font-size: 12px;
   }
 
   .person-panel__peek-hint {
@@ -1048,14 +1088,14 @@ button {
 
   .person-panel.is-collapsed .person-panel__peek-hint {
     display: block;
-    margin: 0 0 6px;
+    margin: 0;
     color: var(--gold);
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .person-panel.is-collapsed h2 {
-    font-size: 20px;
-    margin-bottom: 4px;
+    font-size: 18px;
+    margin: 2px 0;
   }
 
   .icon-close {

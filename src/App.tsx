@@ -15,8 +15,10 @@ function SelectHint() {
 }
 
 export default function App() {
-  const [selectedId, setSelectedId] = useState<string | null>(
-    familyTreeRoot.id,
+  const [selectedId, setSelectedId] = useState<string | null>(() =>
+    typeof window !== "undefined" && window.matchMedia("(max-width: 760px)").matches
+      ? null
+      : familyTreeRoot.id,
   );
   const [historyOpen, setHistoryOpen] = useState(false);
   const isPhone = useIsPhone();
