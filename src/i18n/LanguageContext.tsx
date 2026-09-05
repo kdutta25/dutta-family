@@ -47,6 +47,9 @@ type UiStrings = {
   selectHint: string;
   expandNode: string;
   collapseNode: string;
+  treeHintMobile: string;
+  sheetExpand: string;
+  sheetCollapse: string;
 };
 
 const UI: Record<Language, UiStrings> = {
@@ -72,6 +75,9 @@ const UI: Record<Language, UiStrings> = {
     searchLabel: "Search",
     searchPlaceholder: "Find a name…",
     treeHint: "Drag to pan · Scroll to zoom · Click a name",
+    treeHintMobile: "Pinch to zoom · Drag to move · Tap a name",
+    sheetExpand: "Show details",
+    sheetCollapse: "Hide details",
     noMatches: "No one in this lineage matches that search.",
     male: "Son / male",
     female: "Daughter / female",
@@ -111,6 +117,9 @@ const UI: Record<Language, UiStrings> = {
     searchLabel: "খোঁজ",
     searchPlaceholder: "নাম খুঁজুন…",
     treeHint: "টেনে সরান · স্ক্রল করে জুম · নামে ক্লিক করুন",
+    treeHintMobile: "পিঞ্চ করে জুম · টেনে সরান · নামে ট্যাপ করুন",
+    sheetExpand: "বিস্তারিত দেখুন",
+    sheetCollapse: "বিস্তারিত লুকান",
     noMatches: "এই খোঁজার সাথে কেউ মেলে না।",
     male: "পুত্র / পুরুষ",
     female: "কন্যা / মহিলা",

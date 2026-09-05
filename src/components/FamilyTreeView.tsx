@@ -42,6 +42,7 @@ function Rd3CustomNode({
   selectedId,
   matchIds,
   pathIds,
+  compact,
   onSelect,
 }: {
   rd3tProps: CustomNodeElementProps;
@@ -49,6 +50,7 @@ function Rd3CustomNode({
   selectedId: string | null;
   matchIds: Set<string>;
   pathIds: Set<string>;
+  compact: boolean;
   onSelect: (id: string) => void;
 }): JSX.Element {
   const { ui } = useLanguage();
@@ -76,18 +78,28 @@ function Rd3CustomNode({
   const matched = matchIds.has(id);
   const onPath = pathIds.has(id);
 
+  const cardHeight = compact
+    ? note || title || childCount > 0
+      ? 84
+      : 68
+    : note || title || childCount > 0
+      ? 96
+      : 78;
+  const cardWidth = compact ? 176 : 232;
+
   return (
     <foreignObject
-      width={232}
-      height={note || title || childCount > 0 ? 96 : 78}
-      x={-108}
-      y={-39}
+      width={cardWidth}
+      height={cardHeight}
+      x={compact ? -82 : -108}
+      y={compact ? -34 : -39}
       className="rd3t-foreign"
     >
       <div
         className={[
           "rd3t-person",
           `rd3t-person--${gender}`,
+          compact ? "is-compact" : "",
           selected ? "is-selected" : "",
           matched ? "is-match" : "",
           onPath && !selected ? "is-lineage" : "",
@@ -190,8 +202,8 @@ export function FamilyTreeView({
     const measure = () => {
       const rect = el.getBoundingClientRect();
       setDimensions({
-        width: Math.max(360, Math.floor(rect.width)),
-        height: Math.max(480, Math.floor(rect.height)),
+        width: Math.max(280, Math.floor(rect.width)),
+        height: Math.max(240, Math.floor(rect.height)),
       });
     };
     measure();
@@ -199,6 +211,8 @@ export function FamilyTreeView({
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
+
+  const compact = dimensions.width < 760;
 
   const renderNode = useCallback(
     (rd3tProps: CustomNodeElementProps) => (
@@ -208,10 +222,11 @@ export function FamilyTreeView({
         selectedId={selectedId}
         matchIds={matchIds}
         pathIds={pathIds}
+        compact={compact}
         onSelect={onSelect}
       />
     ),
-    [language, selectedId, matchIds, pathIds, onSelect],
+    [language, selectedId, matchIds, pathIds, compact, onSelect],
   );
 
   const pathClassFunc = useCallback(
@@ -232,7 +247,7 @@ export function FamilyTreeView({
       {!treeData ? (
         <p className="tree-empty">{ui.noMatches}</p>
       ) : (
-        <div ref={wrapRef} className="tree-canvas">
+        <div ref={wrapRef} className={compact ? "tree-canvas is-compact" : "tree-canvas"}>
           <div className="tree-frame" aria-hidden="true" />
           <h2 id="tree-heading" className="sr-only">
             {ui.treeHeading}
@@ -288,23 +303,26 @@ export function FamilyTreeView({
             key={`${language}-${depthKey}-${search}-${viewKey}-${familyTreeRevision}-${dimensions.width}x${dimensions.height}`}
             data={treeData}
             orientation="vertical"
-            translate={{ x: dimensions.width / 2, y: 88 }}
+            translate={{ x: dimensions.width / 2, y: compact ? 126 : 88 }}
             dimensions={dimensions}
-            depthFactor={128}
-            nodeSize={{ x: 280, y: 150 }}
-            separation={{ siblings: 1.35, nonSiblings: 1.5 }}
+            depthFactor={compact ? 108 : 128}
+            nodeSize={{ x: compact ? 196 : 280, y: compact ? 118 : 150 }}
+            separation={{
+              siblings: compact ? 1.12 : 1.35,
+              nonSiblings: compact ? 1.24 : 1.5,
+            }}
             pathFunc="elbow"
             pathClassFunc={pathClassFunc}
             collapsible
             zoomable
             draggable
-            scaleExtent={{ min: 0.08, max: 1.8 }}
-            zoom={0.72}
+            scaleExtent={{ min: compact ? 0.05 : 0.08, max: 1.8 }}
+            zoom={compact ? 0.46 : 0.72}
             renderCustomNodeElement={renderNode}
             hasInteractiveNodes
             initialDepth={initialDepth}
           />
-          <p className="tree-hint">{ui.treeHint}</p>
+          <p className="tree-hint">{compact ? ui.treeHintMobile : ui.treeHint}</p>
         </div>
       )}
     </section>

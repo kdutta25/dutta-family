@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import type { FamilyNode } from "../data/familyTree";
 import { useLanguage } from "../i18n/LanguageContext";
+import { useIsPhone } from "../utils/media";
 
 function displayName(node: FamilyNode, language: "en" | "bn") {
   return language === "bn" && node.bn ? node.bn : node.en;
@@ -40,6 +41,12 @@ export function PersonPanel({
     : undefined;
   const children = person.children ?? [];
   const gender = person.gender === "f" ? "f" : "m";
+  const isPhone = useIsPhone();
+  const [expanded, setExpanded] = useState(false);
+
+  useEffect(() => {
+    setExpanded(false);
+  }, [person.id]);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
@@ -49,11 +56,32 @@ export function PersonPanel({
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
+  const collapsed = isPhone && !expanded;
+
   return (
     <aside
-      className={`person-panel person-panel--${gender}`}
+      className={[
+        "person-panel",
+        `person-panel--${gender}`,
+        collapsed ? "is-collapsed" : "",
+        isPhone ? "is-sheet" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
       aria-labelledby="person-panel-name"
     >
+      {isPhone ? (
+        <button
+          type="button"
+          className="person-panel__handle"
+          aria-expanded={expanded}
+          aria-label={expanded ? ui.sheetCollapse : ui.sheetExpand}
+          onClick={() => setExpanded((open) => !open)}
+        >
+          <span className="person-panel__grip" aria-hidden="true" />
+        </button>
+      ) : null}
+
       <button type="button" className="icon-close" onClick={onClose}>
         {ui.close}
       </button>
@@ -61,7 +89,11 @@ export function PersonPanel({
       <p className="person-panel__gen">
         {ui.generation} {generation}
       </p>
-      <h2 id="person-panel-name" lang={language}>
+      <h2
+        id="person-panel-name"
+        lang={language}
+        onClick={isPhone ? () => setExpanded((open) => !open) : undefined}
+      >
         {displayName(person, language)}
       </h2>
       {secondaryName(person, language) ? (
@@ -71,6 +103,9 @@ export function PersonPanel({
         >
           {secondaryName(person, language)}
         </p>
+      ) : null}
+      {collapsed ? (
+        <p className="person-panel__peek-hint">{ui.sheetExpand}</p>
       ) : null}
 
       <div className="person-panel__meta">

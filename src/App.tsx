@@ -6,6 +6,7 @@ import { HistoryDrawer } from "./components/HistoryDrawer";
 import { FamilyTreeView } from "./components/FamilyTreeView";
 import { PersonPanel } from "./components/PersonPanel";
 import { useLanguage } from "./i18n/LanguageContext";
+import { useIsPhone } from "./utils/media";
 import { pathTo } from "./utils/tree";
 
 function SelectHint() {
@@ -18,6 +19,7 @@ export default function App() {
     familyTreeRoot.id,
   );
   const [historyOpen, setHistoryOpen] = useState(false);
+  const isPhone = useIsPhone();
 
   const lineage = useMemo(
     () => (selectedId ? pathTo(familyTreeRoot, selectedId) : null),
@@ -36,7 +38,7 @@ export default function App() {
         root={familyTreeRoot}
         onOpenHistory={() => setHistoryOpen(true)}
       />
-      <main className="stage">
+      <main className={person && isPhone ? "stage has-sheet" : "stage"}>
         <FamilyTreeView
           root={familyTreeRoot}
           selectedId={selectedId}
