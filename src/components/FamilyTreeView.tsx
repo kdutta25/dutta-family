@@ -96,8 +96,8 @@ function Rd3CustomNode({
     .join(" ");
 
   if (compact) {
-    const width = 168;
-    const height = secondary ? 62 : 52;
+    const width = 220;
+    const height = secondary ? 82 : 68;
     const x = -width / 2;
     const y = -height / 2;
     return (
@@ -118,36 +118,36 @@ function Rd3CustomNode({
           y={y}
           width={width}
           height={height}
-          rx={10}
+          rx={12}
         />
         <rect
           className="rd3t-svg-card__mark"
           x={x}
           y={y}
-          width={7}
+          width={8}
           height={height}
           rx={3}
         />
         <text
           className="rd3t-svg-card__primary"
           lang={language}
-          x={x + 16}
-          y={secondary ? y + 24 : y + 32}
+          x={x + 18}
+          y={secondary ? y + 32 : y + 42}
         >
-          {ellipsize(primary, 16)}
+          {ellipsize(primary, 18)}
         </text>
         {secondary ? (
           <text
             className="rd3t-svg-card__secondary"
             lang={language === "bn" ? "en" : "bn"}
-            x={x + 16}
-            y={y + 42}
+            x={x + 18}
+            y={y + 56}
           >
-            {ellipsize(secondary, 20)}
+            {ellipsize(secondary, 22)}
           </text>
         ) : null}
         {deceased ? (
-          <text className="rd3t-svg-card__dagger" x={x + width - 16} y={y + 22}>
+          <text className="rd3t-svg-card__dagger" x={x + width - 18} y={y + 30}>
             †
           </text>
         ) : null}
@@ -160,8 +160,8 @@ function Rd3CustomNode({
               toggleNode();
             }}
           >
-            <circle cx={x + width - 2} cy={y + height - 2} r={11} />
-            <text x={x + width - 2} y={y + height + 2} textAnchor="middle">
+            <circle cx={x + width - 4} cy={y + height - 4} r={13} />
+            <text x={x + width - 4} y={y + height + 1} textAnchor="middle">
               {collapsed ? "+" : "–"}
             </text>
           </g>
@@ -396,21 +396,21 @@ export function FamilyTreeView({
             key={`${language}-${depthKey}-${search}-${viewKey}-${familyTreeRevision}-${dimensions.width}x${dimensions.height}`}
             data={treeData}
             orientation="vertical"
-            translate={{ x: dimensions.width / 2, y: compact ? 56 : 88 }}
+            translate={{ x: dimensions.width / 2, y: compact ? 64 : 88 }}
             dimensions={dimensions}
-            depthFactor={compact ? 96 : 128}
-            nodeSize={{ x: compact ? 188 : 280, y: compact ? 100 : 150 }}
+            depthFactor={compact ? 118 : 128}
+            nodeSize={{ x: compact ? 248 : 280, y: compact ? 124 : 150 }}
             separation={{
-              siblings: compact ? 1.08 : 1.35,
-              nonSiblings: compact ? 1.18 : 1.5,
+              siblings: compact ? 1.12 : 1.35,
+              nonSiblings: compact ? 1.22 : 1.5,
             }}
             pathFunc="elbow"
             pathClassFunc={pathClassFunc}
             collapsible
             zoomable
             draggable
-            scaleExtent={{ min: compact ? 0.12 : 0.08, max: 1.8 }}
-            zoom={compact ? 0.82 : 0.72}
+            scaleExtent={{ min: compact ? 0.6 : 0.08, max: 1.8 }}
+            zoom={compact ? 1 : 0.72}
             renderCustomNodeElement={renderNode}
             hasInteractiveNodes
             initialDepth={initialDepth}

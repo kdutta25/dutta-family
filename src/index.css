@@ -578,27 +578,29 @@ button {
 .rd3t-svg-card__primary {
   fill: var(--ink);
   font-family: var(--display);
-  font-size: 13px;
+  font-size: 18px;
   font-weight: 600;
 }
 
 .rd3t-svg-card__primary[lang="bn"] {
   font-family: var(--bengali);
+  font-size: 20px;
 }
 
 .rd3t-svg-card__secondary {
   fill: var(--muted);
   font-family: var(--ui);
-  font-size: 10px;
+  font-size: 13px;
 }
 
 .rd3t-svg-card__secondary[lang="bn"] {
   font-family: var(--bengali);
+  font-size: 14px;
 }
 
 .rd3t-svg-card__dagger {
   fill: var(--ink-soft);
-  font-size: 13px;
+  font-size: 16px;
   font-weight: 700;
 }
 
