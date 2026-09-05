@@ -97,17 +97,21 @@ export function PersonPanel({
       ) : null}
 
       <section className="person-panel__block">
-        <h3>{ui.children}</h3>
+        <h3>
+          {ui.children}
+          {children.length ? ` (${children.length})` : ""}
+        </h3>
         {children.length ? (
-          <ul>
-            {children.map((child) => (
+          <ol className="person-panel__children">
+            {children.map((child, index) => (
               <li key={child.id}>
                 <button type="button" onClick={() => onSelect(child.id)}>
+                  <span className="person-panel__num">{index + 1}</span>
                   {t({ en: child.en, bn: child.bn ?? child.en })}
                 </button>
               </li>
             ))}
-          </ul>
+          </ol>
         ) : (
           <p className="person-panel__empty">{ui.noChildren}</p>
         )}

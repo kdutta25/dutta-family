@@ -5,3 +5,4 @@ export type { FamilyNode, Language } from "./familyTree.types";
 
 /** Root of the Dutta tree (loaded from `familyTree.json`). */
 export const familyTreeRoot = familyTreeJson as FamilyNode;
+export const familyTreeRevision = 8;

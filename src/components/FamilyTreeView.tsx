@@ -13,6 +13,7 @@ import Tree, {
 } from "react-d3-tree";
 
 import type { FamilyNode, Language } from "../data/familyTree";
+import { familyTreeRevision } from "../data/familyTree";
 import { useLanguage } from "../i18n/LanguageContext";
 import { filterFamilyNode, matchingIds } from "../utils/tree";
 
@@ -29,6 +30,7 @@ function toRd3(node: FamilyNode): RawNodeDatum {
       titleBn: node.title?.bn ?? "",
       noteEn: node.note?.en ?? "",
       noteBn: node.note?.bn ?? "",
+      childCount: String(node.children?.length ?? 0),
     },
     children: node.children?.map(toRd3),
   };
@@ -65,7 +67,8 @@ function Rd3CustomNode({
   const note = language === "bn" && noteBn ? noteBn : noteEn || undefined;
   const primary = language === "bn" && bn ? bn : en;
   const secondary = language === "bn" ? en : bn;
-  const hasChildren = Boolean(
+  const childCount = Number(a.childCount ?? 0);
+  const hasChildren = childCount > 0 || Boolean(
     nodeDatum.children && nodeDatum.children.length > 0,
   );
   const collapsed = Boolean(nodeDatum.__rd3t?.collapsed);
@@ -75,8 +78,8 @@ function Rd3CustomNode({
 
   return (
     <foreignObject
-      width={216}
-      height={note || title ? 92 : 78}
+      width={232}
+      height={note || title || childCount > 0 ? 96 : 78}
       x={-108}
       y={-39}
       className="rd3t-foreign"
@@ -122,6 +125,11 @@ function Rd3CustomNode({
             <small className="rd3t-person__title">{title}</small>
           ) : null}
           {note ? <span className="rd3t-person__note">{note}</span> : null}
+          {childCount > 0 ? (
+            <span className="rd3t-person__kids">
+              {childCount} {ui.children}
+            </span>
+          ) : null}
         </span>
         {deceased ? (
           <span className="rd3t-person__dagger" title="Deceased">
@@ -277,14 +285,14 @@ export function FamilyTreeView({
             </div>
           </aside>
           <Tree
-            key={`${language}-${depthKey}-${search}-${viewKey}-${dimensions.width}x${dimensions.height}`}
+            key={`${language}-${depthKey}-${search}-${viewKey}-${familyTreeRevision}-${dimensions.width}x${dimensions.height}`}
             data={treeData}
             orientation="vertical"
             translate={{ x: dimensions.width / 2, y: 88 }}
             dimensions={dimensions}
             depthFactor={128}
-            nodeSize={{ x: 236, y: 136 }}
-            separation={{ siblings: 1.05, nonSiblings: 1.28 }}
+            nodeSize={{ x: 280, y: 150 }}
+            separation={{ siblings: 1.35, nonSiblings: 1.5 }}
             pathFunc="elbow"
             pathClassFunc={pathClassFunc}
             collapsible

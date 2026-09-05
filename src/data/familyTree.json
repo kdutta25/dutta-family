@@ -59,16 +59,7 @@
                                   "en": "Kali Dasi",
                                   "bn": "কালী দাসী",
                                   "deceased": true,
-                                  "gender": "f",
-                                  "children": [
-                                    {
-                                      "id": "yogendranath",
-                                      "en": "Yogendranath Dutta",
-                                      "bn": "যোগেন্দ্রনাথ দত্ত",
-                                      "deceased": true,
-                                      "gender": "m"
-                                    }
-                                  ]
+                                  "gender": "f"
                                 }
                               ]
                             }
@@ -106,6 +97,13 @@
                                   "gender": "m",
                                   "children": [
                                     {
+                                      "id": "yogendranath",
+                                      "en": "Yogendranath Dutta",
+                                      "bn": "যোগেন্দ্রনাথ দত্ত",
+                                      "deceased": true,
+                                      "gender": "m"
+                                    },
+                                    {
                                       "id": "brajendranath",
                                       "en": "Sri Brajendranath Dutta",
                                       "bn": "শ্রী ব্রজেন্দ্রনাথ দত্ত",
@@ -125,15 +123,22 @@
                                           "bn": "কুমারী মীরা",
                                           "deceased": true,
                                           "gender": "f"
+                                        },
+                                        {
+                                          "id": "kumari-usha",
+                                          "en": "Kumari Usha",
+                                          "bn": "কুমারী উষা",
+                                          "deceased": true,
+                                          "gender": "f"
+                                        },
+                                        {
+                                          "id": "ramendranath",
+                                          "en": "Sriman Ramendranath Dutta",
+                                          "bn": "শ্রীমান রমেন্দ্রনাথ দত্ত",
+                                          "deceased": true,
+                                          "gender": "m"
                                         }
                                       ]
-                                    },
-                                    {
-                                      "id": "yogamaya",
-                                      "en": "Yogamaya",
-                                      "bn": "যোগমায়া",
-                                      "deceased": true,
-                                      "gender": "f"
                                     }
                                   ]
                                 },
@@ -152,6 +157,13 @@
                                   "gender": "m",
                                   "children": [
                                     {
+                                      "id": "yogamaya",
+                                      "en": "Yogamaya",
+                                      "bn": "যোগমায়া",
+                                      "deceased": true,
+                                      "gender": "f"
+                                    },
+                                    {
                                       "id": "sukhalata",
                                       "en": "Srimati Sukhalata",
                                       "bn": "শ্রীমতী সুখলতা",
@@ -159,7 +171,7 @@
                                       "gender": "f"
                                     },
                                     {
-                                      "id": "makar",
+                                      "id": "makar-paban",
                                       "en": "Srimati Makar",
                                       "bn": "শ্রীমতী মকর",
                                       "deceased": true,
@@ -170,32 +182,14 @@
                                       "en": "Shri Patit Paban Dutta",
                                       "bn": "শ্রী পতিত পাবন দত্ত",
                                       "deceased": true,
-                                      "gender": "m",
-                                      "children": [
-                                        {
-                                          "id": "kumari-usha",
-                                          "en": "Kumari Usha",
-                                          "bn": "কুমারী উষা",
-                                          "deceased": true,
-                                          "gender": "f"
-                                        }
-                                      ]
+                                      "gender": "m"
                                     },
                                     {
                                       "id": "parbati-charan",
                                       "en": "Shri Parbati Charan Dutta",
                                       "bn": "শ্রী পার্বতী চরণ দত্ত",
                                       "deceased": true,
-                                      "gender": "m",
-                                      "children": [
-                                        {
-                                          "id": "ramendranath",
-                                          "en": "Sriman Ramendranath Dutta",
-                                          "bn": "শ্রীমান রমেন্দ্রনাথ দত্ত",
-                                          "deceased": true,
-                                          "gender": "m"
-                                        }
-                                      ]
+                                      "gender": "m"
                                     },
                                     {
                                       "id": "leela",
@@ -203,6 +197,13 @@
                                       "bn": "শ্রীমতী লীলা",
                                       "deceased": true,
                                       "gender": "f"
+                                    },
+                                    {
+                                      "id": "shankar-mauli",
+                                      "en": "Shri Shankar Mauli Dutta",
+                                      "bn": "শ্রী শঙ্কর মৌলী দত্ত",
+                                      "deceased": true,
+                                      "gender": "m"
                                     }
                                   ]
                                 }
@@ -254,9 +255,19 @@
                                           "en": "Two daughters",
                                           "bn": "দুইটী কন্যা",
                                           "gender": "f",
-                                          "note": { "en": "As on the chart", "bn": "চার্ট অনুযায়ী" }
+                                          "note": {
+                                            "en": "As on the chart",
+                                            "bn": "চার্ট অনুযায়ী"
+                                          }
                                         }
                                       ]
+                                    },
+                                    {
+                                      "id": "bula",
+                                      "en": "Bula",
+                                      "bn": "বুলা",
+                                      "deceased": true,
+                                      "gender": "f"
                                     }
                                   ]
                                 },
@@ -267,13 +278,6 @@
                                   "deceased": true,
                                   "gender": "m",
                                   "children": [
-                                    {
-                                      "id": "bula",
-                                      "en": "Bula",
-                                      "bn": "বুলা",
-                                      "deceased": true,
-                                      "gender": "f"
-                                    },
                                     {
                                       "id": "nalini-bijoy",
                                       "en": "Shri Nalini Bijay Dutta",
@@ -298,13 +302,6 @@
                                   ]
                                 }
                               ]
-                            },
-                            {
-                              "id": "shankar-mauli",
-                              "en": "Shri Shankar Mauli Dutta",
-                              "bn": "শ্রী শঙ্কর মৌলী দত্ত",
-                              "deceased": true,
-                              "gender": "m"
                             }
                           ]
                         },

@@ -488,6 +488,14 @@ button {
   font-style: italic;
 }
 
+.rd3t-person__kids {
+  margin-top: 3px;
+  color: var(--gold);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
 .rd3t-person__dagger {
   align-self: start;
   margin-top: 2px;
@@ -660,10 +668,24 @@ button {
 }
 
 .person-panel__block ul,
+.person-panel__children,
 .person-panel__lineage {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.person-panel__num {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background: rgb(138 106 44 / 0.14);
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .person-panel__block button {
